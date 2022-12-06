@@ -1,24 +1,28 @@
-const router = require('express').Router();
-const { Product, Category, Tag, ProductTag } = require('../../models');
+const router = require("express").Router();
+const { Product, Category, Tag, ProductTag } = require("../../models");
 
 // The `/api/products` endpoint
 
 // get all products
-router.get('/', (req, res) => {
+//http://localhost:3001/api/products
+router.get("/", (req, res) => {
   // find all products
   // be sure to include its associated Category and Tag data
-
-  //use join - sequelize 
+  //use join - sequelize
 });
 
 // get one product
-router.get('/:id', (req, res) => {
+//http://localhost:3001/api/products/:id -> param = :id = res.param.id
+router.get("/:id", (req, res) => {
+  //res.param.id
   // find a single product by its `id`
   // be sure to include its associated Category and Tag data
 });
 
 // create new product
-router.post('/', (req, res) => {
+//http://localhost:3001/api/products
+router.post("/", (req, res) => {
+  //req.body
   /* req.body should look like this...
     {
       product_name: "Basketball",
@@ -27,6 +31,8 @@ router.post('/', (req, res) => {
       tagIds: [1, 2, 3, 4]
     }
   */
+
+  // Class constructor
   Product.create(req.body)
     .then((product) => {
       // if there's product tags, we need to create pairings to bulk create in the ProductTag model
@@ -50,7 +56,10 @@ router.post('/', (req, res) => {
 });
 
 // update product
-router.put('/:id', (req, res) => {
+//http://localhost:3001/api/catergories/:id -> param
+router.put("/:id", (req, res) => {
+  //req.body
+  //where
   // update product data
   Product.update(req.body, {
     where: {
@@ -74,15 +83,10 @@ router.put('/:id', (req, res) => {
           };
         });
       // figure out which ones to remove
-      const productTagsToRemove = productTags
-        .filter(({ tag_id }) => !req.body.tagIds.includes(tag_id))
-        .map(({ id }) => id);
+      const productTagsToRemove = productTags.filter(({ tag_id }) => !req.body.tagIds.includes(tag_id)).map(({ id }) => id);
 
       // run both actions
-      return Promise.all([
-        ProductTag.destroy({ where: { id: productTagsToRemove } }),
-        ProductTag.bulkCreate(newProductTags),
-      ]);
+      return Promise.all([ProductTag.destroy({ where: { id: productTagsToRemove } }), ProductTag.bulkCreate(newProductTags)]);
     })
     .then((updatedProductTags) => res.json(updatedProductTags))
     .catch((err) => {
@@ -91,7 +95,7 @@ router.put('/:id', (req, res) => {
     });
 });
 
-router.delete('/:id', (req, res) => {
+router.delete("/:id", (req, res) => {
   // delete one product by its `id` value
 });
 
