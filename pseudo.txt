@@ -13,9 +13,6 @@ WHEN I enter the command to invoke the application
 THEN my server is started and the Sequelize models are synced to the MySQL database
 
 
-
-
-
 Acceptance Criteria TODO :: 
 
 WHEN I open API GET routes in Insomnia Core for :
@@ -37,3 +34,13 @@ Notes ::
   2. POST (create new data)
   3. PUT (update data)
   4. DELETE (remove data)
+
+
+Tomorrow TODO :: 
+1. Set up associations in models/index.js
+2. PUT/POST routes in product.js
+  a. Change routes to async/await
+  b. Finish up routes
+  c. Comment current code to better understand
+3. Review errors and catch 
+
