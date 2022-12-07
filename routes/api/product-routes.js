@@ -5,18 +5,30 @@ const { Product, Category, Tag, ProductTag } = require("../../models");
 
 // get all products
 //http://localhost:3001/api/products
-router.get("/", (req, res) => {
+router.get("/", async (req, res) => {
   // find all products
   // be sure to include its associated Category and Tag data
   //use join - sequelize
+  try {
+    const productData = await Product.findAll();
+    return res.json(productData);
+  } catch (err) {
+    res.status(500).json(err);
+    console.log("Testing Error");
+    //catch error here
+  }
 });
 
 // get one product
 //http://localhost:3001/api/products/:id -> param = :id = res.param.id
-router.get("/:id", (req, res) => {
+router.get("/:id", async (req, res) => {
   //res.param.id
   // find a single product by its `id`
   // be sure to include its associated Category and Tag data
+  try {
+    const productData = await Category.findByPk(req.params.id);
+    res.status(200).json(productData);
+  } catch (error) {}
 });
 
 // create new product
