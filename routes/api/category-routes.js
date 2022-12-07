@@ -18,42 +18,66 @@ router.get("/", async (req, res) => {
 });
 //http://localhost:3001/api/categories/:id -> param = :id = (res.param.id)
 router.get("/:id", async (req, res) => {
-  //res.param.id
-  // find one category by its `id` value
-  // be sure to include its associated Products
-
-  // try {
-  //   const userData = await User.findByPk(req.params.id);
-  //   if (!userData) {
-  //     res.status(404).json({ message: "No user with this id!" });
-  //     return;
-  //   }
-  //   res.status(200).json(userData); //
-  // } catch (err) {
-  //   res.status(500).json(err);
-  // }
   try {
     const categoriesData = await Category.findByPk(req.params.id);
+    // if (!userData) {
+    //   res.status(404).json({ message: "No user with this id!" });
+    //   return;
+    // }
     res.status(200).json(categoriesData);
-  } catch (error) {}
+  } catch (err) {
+    res.status(500).json(err);
+  }
 });
 
 //http://localhost:3001/api/categories
-router.post("/", (req, res) => {
+router.post("/", async (req, res) => {
   //req.body
   // create a new category
+  try {
+    const categoriesData = await Category.create(req.body);
+    res.status(200).json(categoriesData);
+  } catch (err) {
+    // res.status(400).json(err);
+  }
 });
 
 //http://localhost:3001/api/categories/:id -> param
-router.put("/:id", (req, res) => {
-  //req.body
-  //where
+router.put("/:id", async (req, res) => {
   // update a category by its `id` value
+  try {
+    const categoriesData = await Category.update(req.body, {
+      where: {
+        id: req.params.id,
+      },
+    });
+    // if (!userData[0]) {
+    //   res.status(404).json({ message: "No user with this id!" });
+    //   return;
+    // }
+    res.status(200).json(categoriesData);
+  } catch (err) {
+    // res.status(500).json(err);
+  }
 });
 
 //http://localhost:3001/api/categories/:id -> param
-router.delete("/:id", (req, res) => {
+router.delete("/:id", async (req, res) => {
   // delete a category by its `id` value
+  try {
+    const categoriesData = await Category.destroy({
+      where: {
+        id: req.params.id,
+      },
+    });
+    // if (!userData) {
+    //   res.status(404).json({ message: "No user with this id!" });
+    //   return;
+    // }
+    res.status(200).json(categoriesData);
+  } catch (err) {
+    // res.status(500).json(err);
+  }
 });
 
 module.exports = router;

@@ -6,6 +6,7 @@ class ProductTag extends Model {}
 
 ProductTag.init(
   {
+    // Primary Key
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -19,6 +20,7 @@ ProductTag.init(
         key: "id",
       },
     },
+    // Foreign Key - references tag table, column id
     tag_id: {
       type: DataTypes.INTEGER,
       references: {

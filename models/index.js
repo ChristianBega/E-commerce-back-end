@@ -26,6 +26,3 @@ module.exports = {
   Tag,
   ProductTag,
 };
-
-
-// We need to do associations 

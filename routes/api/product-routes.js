@@ -28,7 +28,9 @@ router.get("/:id", async (req, res) => {
   try {
     const productData = await Category.findByPk(req.params.id);
     res.status(200).json(productData);
-  } catch (error) {}
+  } catch (error) {
+    res.status(500).json(err);
+  }
 });
 
 // create new product
@@ -43,7 +45,6 @@ router.post("/", (req, res) => {
       tagIds: [1, 2, 3, 4]
     }
   */
-
   // Class constructor
   Product.create(req.body)
     .then((product) => {
