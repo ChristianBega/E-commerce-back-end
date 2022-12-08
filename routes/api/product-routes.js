@@ -10,7 +10,9 @@ router.get("/", async (req, res) => {
   // be sure to include its associated Category and Tag data
   //use join - sequelize
   try {
-    const productData = await Product.findAll();
+    const productData = await Product.findAll({
+      include: [{ model: Category }, { model: Tag }],
+    });
     return res.json(productData);
   } catch (err) {
     res.status(500).json(err);
@@ -26,7 +28,9 @@ router.get("/:id", async (req, res) => {
   // find a single product by its `id`
   // be sure to include its associated Category and Tag data
   try {
-    const productData = await Category.findByPk(req.params.id);
+    const productData = await Product.findByPk(req.params.id, {
+      include: [{ model: Category }, { model: Tag }],
+    });
     res.status(200).json(productData);
   } catch (error) {
     res.status(500).json(err);
@@ -35,45 +39,48 @@ router.get("/:id", async (req, res) => {
 
 // create new product
 //http://localhost:3001/api/products
-router.post("/", (req, res) => {
-  //req.body
-  /* req.body should look like this...
-    {
-      product_name: "Basketball",
-      price: 200.00,
-      stock: 3,
-      tagIds: [1, 2, 3, 4]
-    }
-  */
-  // Class constructor
-  Product.create(req.body)
-    .then((product) => {
-      // if there's product tags, we need to create pairings to bulk create in the ProductTag model
-      if (req.body.tagIds.length) {
-        const productTagIdArr = req.body.tagIds.map((tag_id) => {
-          return {
-            product_id: product.id,
-            tag_id,
-          };
-        });
-        return ProductTag.bulkCreate(productTagIdArr);
-      }
-      // if no product tags, just respond
-      res.status(200).json(product);
-    })
-    .then((productTagIds) => res.status(200).json(productTagIds))
-    .catch((err) => {
-      console.log(err);
-      res.status(400).json(err);
+
+router.post("/", async (req, res) => {
+  try {
+    // Questions - should I be including the Category and Tag into the post??????
+    const productData = await Product.create(req.body, {
+      include: [{ model: Category }, { model: Tag }],
     });
+    if (req.body.tagIds.length) {
+      // Mapping over req.body.tagIds >
+      const productTagIdArr = req.body.tagIds.map((tag_id) => {
+        return {
+          //return each product.id & tag_id
+          product_id: productData.id,
+          tag_id,
+        };
+      });
+      // returns a new array of all req.body.tagIds??
+      const productTagIds = await ProductTag.bulkCreate(productTagIdArr);
+      return res.status(200).json(productTagIds);
+    }
+    res.status(200).json(productData);
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(err);
+  }
 });
 
 // update product
 //http://localhost:3001/api/catergories/:id -> param
-router.put("/:id", (req, res) => {
+router.put("/:id", async (req, res) => {
   //req.body
   //where
   // update product data
+  // try {
+  //   const productData = await Product.update(req.body, {
+  //     where: {
+  //       id: req.params.id,
+  //     },
+  //   });
+  //   return ProductTag.findAll({ where: { product_id: req.params.id } });
+  // } catch (error) {}
+
   Product.update(req.body, {
     where: {
       id: req.params.id,
@@ -108,8 +115,22 @@ router.put("/:id", (req, res) => {
     });
 });
 
-router.delete("/:id", (req, res) => {
+router.delete("/:id", async (req, res) => {
   // delete one product by its `id` value
+  try {
+    const tagData = await Tag.destroy({
+      where: {
+        id: req.params.id,
+      },
+    });
+    // if (!userData) {
+    //   res.status(404).json({ message: "No user with this id!" });
+    //   return;
+    // }
+    res.status(200).json(tagData);
+  } catch (err) {
+    // res.status(500).json(err);
+  }
 });
 
 module.exports = router;

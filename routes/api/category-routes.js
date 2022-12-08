@@ -8,7 +8,9 @@ router.get("/", async (req, res) => {
   // find all categories
   // include associated Products
   try {
-    const categoriesData = await Category.findAll();
+    const categoriesData = await Category.findAll({
+      include: [{ model: Product }],
+    });
     return res.json(categoriesData);
   } catch (err) {
     res.status(500).json(err);
@@ -19,7 +21,9 @@ router.get("/", async (req, res) => {
 //http://localhost:3001/api/categories/:id -> param = :id = (res.param.id)
 router.get("/:id", async (req, res) => {
   try {
-    const categoriesData = await Category.findByPk(req.params.id);
+    const categoriesData = await Category.findByPk(req.params.id, {
+      include: [{ model: Product }],
+    });
     // if (!userData) {
     //   res.status(404).json({ message: "No user with this id!" });
     //   return;

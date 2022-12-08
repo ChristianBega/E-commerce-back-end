@@ -44,3 +44,11 @@ Tomorrow TODO ::
   c. Comment current code to better understand
 3. Review errors and catch 
 
+
+
+
+
+Check list :: GETS
+1. Categories - needs products (id, product_name, price, stock, category_id)
+2. Products needs Category (id, category_name) && tags ()
+3. Tags
