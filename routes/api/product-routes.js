@@ -41,16 +41,16 @@ router.get("/:id", async (req, res) => {
 //http://localhost:3001/api/products
 
 router.post("/", async (req, res) => {
+  // console.log(req.body.tagIds);
   try {
     // Questions - should I be including the Category and Tag into the post??????
-    const productData = await Product.create(req.body, {
-      include: [{ model: Category }, { model: Tag }],
-    });
+    const productData = await Product.create(req.body);
     if (req.body.tagIds.length) {
       // Mapping over req.body.tagIds >
+      //                                            param - this is what we named it
       const productTagIdArr = req.body.tagIds.map((tag_id) => {
         return {
-          //return each product.id & tag_id
+          //return each productData.id & tag_id
           product_id: productData.id,
           tag_id,
         };
@@ -68,19 +68,8 @@ router.post("/", async (req, res) => {
 
 // update product
 //http://localhost:3001/api/catergories/:id -> param
-router.put("/:id", async (req, res) => {
-  //req.body
-  //where
+router.put("/:id", (req, res) => {
   // update product data
-  // try {
-  //   const productData = await Product.update(req.body, {
-  //     where: {
-  //       id: req.params.id,
-  //     },
-  //   });
-  //   return ProductTag.findAll({ where: { product_id: req.params.id } });
-  // } catch (error) {}
-
   Product.update(req.body, {
     where: {
       id: req.params.id,
@@ -118,18 +107,18 @@ router.put("/:id", async (req, res) => {
 router.delete("/:id", async (req, res) => {
   // delete one product by its `id` value
   try {
-    const tagData = await Tag.destroy({
+    const productData = await Product.destroy({
       where: {
         id: req.params.id,
       },
     });
-    // if (!userData) {
-    //   res.status(404).json({ message: "No user with this id!" });
-    //   return;
-    // }
-    res.status(200).json(tagData);
+    if (!productData) {
+      res.status(404).json({ message: "No product with this id!" });
+      return;
+    }
+    res.status(200).json(productData);
   } catch (err) {
-    // res.status(500).json(err);
+    res.status(500).json(err);
   }
 });
 

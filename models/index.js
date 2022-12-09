@@ -10,7 +10,6 @@ Category.hasMany(Product, {
   foreignKey: "category_id",
   onDelete: "CASCADE",
 });
-
 //I want tags
 //  Target             Source
 // Products belongsTo Category
@@ -20,13 +19,12 @@ Product.belongsTo(Category, {
 
 Product.belongsToMany(Tag, {
   through: ProductTag,
-  foreignKey: "tag_id",
+  foreignKey: "product_id",
 });
 
 Tag.belongsToMany(Product, {
   through: ProductTag,
   foreignKey: "tag_id",
-  onDelete: "CASCADE",
 });
 
 // Products belongToMany Tags (through ProductTag)
@@ -39,4 +37,3 @@ module.exports = {
   Tag,
   ProductTag,
 };
-

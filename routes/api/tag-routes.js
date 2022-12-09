@@ -75,13 +75,13 @@ router.delete("/:id", async (req, res) => {
         id: req.params.id,
       },
     });
-    // if (!userData) {
-    //   res.status(404).json({ message: "No user with this id!" });
-    //   return;
-    // }
+    if (!userData) {
+      res.status(404).json({ message: "No user with this id!" });
+      return;
+    }
     res.status(200).json(tagData);
   } catch (err) {
-    // res.status(500).json(err);
+    res.status(500).json(err);
   }
 });
 
