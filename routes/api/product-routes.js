@@ -22,7 +22,7 @@ router.get("/", async (req, res) => {
 });
 
 // get one product
-//http://localhost:3001/api/products/:id -> param = :id = res.param.id
+//http://localhost:3001/api/products/:id -> param
 router.get("/:id", async (req, res) => {
   //res.param.id
   // find a single product by its `id`
@@ -41,12 +41,10 @@ router.get("/:id", async (req, res) => {
 //http://localhost:3001/api/products
 
 router.post("/", async (req, res) => {
-  // console.log(req.body.tagIds);
   try {
     const productData = await Product.create(req.body);
     if (req.body.tagIds.length) {
       // Mapping over req.body.tagIds >
-      //                                            param - this is what we named it
       const productTagIdArr = req.body.tagIds.map((tag_id) => {
         return {
           //return each productData.id & tag_id

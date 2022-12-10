@@ -19,10 +19,9 @@ router.get("/", async (req, res) => {
   }
 });
 
-//http://localhost:3001/api/tags/:id -> param = :id = res.param.id
+//http://localhost:3001/api/tags/:id -> param
 router.get("/:id", async (req, res) => {
   // find a single tag by its `id`
-  // be sure to include its associated Product data
   try {
     const tagData = await Tag.findByPk(req.params.id, {
       include: [{ model: Product }],
@@ -35,7 +34,6 @@ router.get("/:id", async (req, res) => {
 
 //http://localhost:3001/api/tags
 router.post("/", async (req, res) => {
-  //req.body
   // create a new tag
   try {
     const tagData = await Tag.create(req.body);
@@ -47,8 +45,6 @@ router.post("/", async (req, res) => {
 
 // http://localhost:3001/api/tags/:id -> param
 router.put("/:id", async (req, res) => {
-  //req.body
-  //where
   // update a tag's name by its `id` value
   try {
     const tagData = await Tag.update(req.body, {
