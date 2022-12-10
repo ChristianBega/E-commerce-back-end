@@ -43,7 +43,6 @@ router.get("/:id", async (req, res) => {
 router.post("/", async (req, res) => {
   // console.log(req.body.tagIds);
   try {
-    // Questions - should I be including the Category and Tag into the post??????
     const productData = await Product.create(req.body);
     if (req.body.tagIds.length) {
       // Mapping over req.body.tagIds >
