@@ -2,7 +2,7 @@
 
 ## Description
 
-For this project I created a E-commerce-back-end application that allows a user to query for categories, products, and tags. /n
+For this project I created a E-commerce-back-end application that allows a user to query for categories, products, and tags.
 Utilizing the crud operations (get,post,put, & delete) a user is able to manipulate the database via Insomnia.
 
 ---
